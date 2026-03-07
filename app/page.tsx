@@ -131,15 +131,15 @@ function TopBar({ tab, setTab, lastRun }: { tab:string; setTab:(t:string)=>void;
         </div>
         <nav style={{ display:"flex", flex:1 }}>
           {tabs.map(t => (
-            <button key={t} onClick={() => setTab(t)} style={{ background:"none", border:"none", cursor:"pointer", padding:"18px 20px", fontSize:11, fontFamily:"var(--ff-mono)", fontWeight:500, letterSpacing:"1px", textTransform:"uppercase", color:tab===t?"#ffffff":"rgba(255,255,255,.6)", borderBottom:tab===t?"2px solid #ffffff":"2px solid transparent", marginBottom:"-2px", transition:"all .2s" }}>{t}</button>
+            <button key={t} onClick={() => setTab(t)} style={{ background:"none", border:"none", cursor:"pointer", padding:"18px 20px", fontSize:11, fontFamily:"var(--ff-mono)", fontWeight:500, letterSpacing:"1px", textTransform:"uppercase", color:tab===t?"#6366f1":"rgba(107,114,128,.7)", borderBottom:tab===t?"2px solid #6366f1":"2px solid transparent", marginBottom:"-2px", transition:"all .2s" }}>{t}</button>
           ))}
         </nav>
         <div style={{ fontSize:10, fontFamily:"var(--ff-mono)", color:"rgba(255,255,255,.7)", textAlign:"right" }}>
           <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-            <span style={{ width:6, height:6, borderRadius:"50%", background:"rgba(255,255,255,.8)", display:"inline-block", animation:"pulse 2s infinite" }}/>
+            <span style={{ width:6, height:6, borderRadius:"50%", background:"rgba(99,102,241,.8)", display:"inline-block", animation:"pulse 2s infinite" }}/>
             LIVE · IST
           </div>
-          <div style={{ marginTop:2, color:"rgba(255,255,255,.6)" }}>{lastRun ? `Last run: ${new Date(lastRun).toLocaleTimeString("en-IN",{timeStyle:"short"})}` : now}</div>
+          <div style={{ marginTop:2, color:"rgba(107,114,128,.8)" }}>{lastRun ? `Last run: ${new Date(lastRun).toLocaleTimeString("en-IN",{timeStyle:"short"})}` : now}</div>
         </div>
       </div>
     </header>
@@ -155,7 +155,7 @@ function SituationMap({ districts, loading }: { districts: District[]; loading: 
 
   return (
     <div style={{ display:"grid", gridTemplateColumns:"1fr 360px", height:"calc(100vh - 110px)", background:"linear-gradient(135deg,#ffffff,#f3f4f6)" }}>
-      <div style={{ position:"relative", background:\"var(--paper)\", borderRight:\"1px solid var(--border)\" }}>
+      <div style={{ position:"relative", background:"var(--paper)", borderRight:"1px solid var(--border)" }}>
         {/* stat strip */}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", borderBottom:"1px solid var(--border)", background:"var(--paper)", position:"relative", zIndex:10 }}>
           {[
@@ -632,7 +632,7 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
   return (
     <div style={{ display:"flex", height:"calc(100vh - 110px)", background:"#ffffff" }}>
       {/* Sidebar */}
-      <div style={{ width:240, borderRight:"1px solid var(--border)", background:"linear-gradient(180deg,var(--paper),var(--paper2))", flexShrink:0, overflowY:"auto" }}>
+    <div style={{ width:240, borderRight:"1px solid var(--border)", background:"linear-gradient(180deg,var(--paper),var(--paper2))", flexShrink:0, overflowY:"auto" }}>
         <div style={{ padding:"16px 16px 10px", borderBottom:"1px solid var(--border)" }}>
           <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", letterSpacing:"1.5px", marginBottom:10 }}>QUICK BRIEFINGS</div>
           {STARTERS.map((s,i) => (
@@ -667,7 +667,7 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
           {msgs.map((m,i) => (
             <div key={i} style={{ display:"flex", flexDirection:"column", alignItems:m.role==="user"?"flex-end":"flex-start", animation:"fadeUp .3s ease both" }}>
               <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:m.role==="user"?"var(--muted)":"var(--amber)", letterSpacing:"1.5px", marginBottom:5, fontWeight:600 }}>{m.role==="user"?"DISTRICT OFFICER":"⚡ SURGESHIELD AI"}</div>
-              <div style={{ maxWidth:580, padding:"14px 18px", borderRadius:m.role==="user"?"12px 12px 3px 12px":"3px 12px 12px 12px", background:m.role==="user"?"var(--grad-ai)":"var(--paper)", border:`1px solid ${m.role==="user"?"var(--accent)":"var(--border)"}`, fontSize:12, fontFamily:"var(--ff-body)", lineHeight:1.8, color:m.role==="user"?"#ffffff":"var(--ink)", boxShadow:"0 4px 12px var(--shadow)" }}>
+          <div style={{ maxWidth:580, padding:"14px 18px", borderRadius:m.role==="user"?"12px 12px 3px 12px":"3px 12px 12px 12px", background:m.role==="user"?"var(--grad-ai)":"var(--paper)", border:`1px solid ${m.role==="user"?"var(--accent)":"var(--border)"}`, fontSize:12, fontFamily:"var(--ff-body)", lineHeight:1.8, color:m.role==="user"?"#ffffff":"var(--ink)", boxShadow:"0 4px 12px var(--shadow)" }}>
                 {renderText(m.text)}
               </div>
               <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", marginTop:4 }}>{tStr(m.time)}</div>
@@ -676,7 +676,7 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
           {busy && (
             <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-start" }}>
               <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--amber)", letterSpacing:"1.5px", marginBottom:5, fontWeight:600 }}>⚡ SURGESHIELD AI</div>
-              <div style={{ padding:"14px 18px", background:"var(--paper2)", border:"1px solid var(--border)", borderRadius:"3px 12px 12px 12px", display:"flex", alignItems:"center", gap:5 }}>
+            <div style={{ padding:"14px 18px", background:"var(--paper2)", border:"1px solid var(--border)", borderRadius:"3px 12px 12px 12px", display:"flex", alignItems:"center", gap:5 }}>
                 {[0,1,2].map(i => <div key={i} style={{ width:7, height:7, borderRadius:"50%", background:"var(--amber)", animation:`dotBlink 1.4s ${i*.2}s infinite` }}/>)}
               </div>
             </div>
