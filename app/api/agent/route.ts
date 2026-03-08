@@ -200,8 +200,8 @@ ALWAYS follow this sequence:
 
 2. **THEN: Handle data staleness**
    - If data is STALE (>2 hours old) and question is about predictions/forecasts/analysis:
-     * Add this to your response with small font: "However, I'm triggering fresh analysis to ensure you get the most up-to-date predictions. Latest data will be available in ~5-10 minutes."
-     * Respond with small fonts: "STALE_TRIGGER_PIPELINE" at the end (will auto-trigger fresh analysis)
+     * Add this to your response: "Fresh analysis has been triggered to get the most up-to-date predictions."
+     * Respond with: "STALE_TRIGGER_PIPELINE" at the end (will auto-trigger fresh analysis)
    - If data is STALE but question is routine (capacity, alerts): Just provide current data, no refresh needed
 
 3. **ONLY if truly insufficient data:**
@@ -257,9 +257,9 @@ Officer's question: ${message.trim()}
           .replace("STALE_TRIGGER_PIPELINE", "")
           .trim() || "Analysis triggered. Fetching fresh data...";
         
-        // Add auto-trigger notification only if still needed
+        // Auto-trigger notification
         if (!finalResponse.includes("auto") && !finalResponse.includes("trigger")) {
-          finalResponse += `\n\n**[AUTO-TRIGGERED]** Fresh analysis has been automatically triggered (Job: ${pipelineJobName}). New predictions will be available in approximately 5-10 minutes.`;
+          finalResponse += `\n\n**[ANALYSIS TRIGGERED]** Fresh analysis has been automatically triggered and is now running.`;
         }
       }
     } else if (needsInsufficientData || needsStaleTrigger) {
