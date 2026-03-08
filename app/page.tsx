@@ -825,7 +825,7 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
         </div>
         <div style={{ borderTop:"1px solid var(--border)", padding:"14px 32px 20px", background:"var(--paper)" }}>
           {/* Data Disclaimer */}
-          <div style={{ background:"var(--paper2)", border:"1px solid var(--border)", borderRadius:6, padding:"10px 12px", fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", lineHeight:1.6, letterSpacing:".5px", marginBottom:12 }}>
+          <div style={{ padding:"10px 12px", fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", lineHeight:1.6, letterSpacing:".5px", marginBottom:12 }}>
             <div style={{ color:"var(--ink)", fontWeight:600, marginBottom:4 }}>📊 Data & Forecasts</div>
             <div style={{fontSize:8, fontWeight:300, fontStyle:"italic"}}>Please note that these predictions are based on the latest available data. For the most accurate and up-to-date forecasts, consider triggering a new analysis by explicitly requesting <span style={{ fontWeight:600, color:"var(--amber)" }}>"Run pipeline"</span> or <span style={{ fontWeight:600, color:"var(--amber)" }}>"Trigger analysis".</span></div>
           </div>

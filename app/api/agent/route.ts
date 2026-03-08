@@ -200,8 +200,8 @@ ALWAYS follow this sequence:
 
 2. **THEN: Handle data staleness**
    - If data is STALE (>2 hours old) and question is about predictions/forecasts/analysis:
-     * Add this to your response: "However, I'm triggering fresh analysis to ensure you get the most up-to-date predictions. Latest data will be available in ~5-10 minutes."
-     * Respond with: "STALE_TRIGGER_PIPELINE" at the end (will auto-trigger fresh analysis)
+     * Add this to your response with small font: "However, I'm triggering fresh analysis to ensure you get the most up-to-date predictions. Latest data will be available in ~5-10 minutes."
+     * Respond with small fonts: "STALE_TRIGGER_PIPELINE" at the end (will auto-trigger fresh analysis)
    - If data is STALE but question is routine (capacity, alerts): Just provide current data, no refresh needed
 
 3. **ONLY if truly insufficient data:**
