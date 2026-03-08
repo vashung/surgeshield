@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "SurgeShield — Public Health Command",
+  title: "SurgeShield — Public Health AI for Dengue Outbreak Management",
   description: "AI-powered dengue outbreak management for district health officers",
   icons: { icon: "/favicon.ico" },
 };

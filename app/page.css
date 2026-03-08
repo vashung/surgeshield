@@ -1,25 +1,25 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    /* light theme palette */
-    --ink:#1a1a1a; --paper:#ffffff; --paper2:#f3f4f6; --paper3:#e5e7eb;
+    /* dark AI-themed palette */
+    --ink:#1a1208; --paper:#f5efe4; --paper2:#ede5d4; --paper3:#e3d9c6;
     --accent:#6366f1;        /* indigo */
     --accent-lt:#818cf8;     /* lighter indigo */
     --danger:#ef4444;        /* red */
     --success:#10b981;       /* emerald */
-    --muted:#6b7280;         /* slate */
-    --border:#d1d5db;        /* light border */
-    --shadow:rgba(0,0,0,.08);
-    /* light gradients */
-    --grad-ai:linear-gradient(135deg,#6366f1,#818cf8);
-    --grad-danger:linear-gradient(135deg,#fee2e2,#fecaca);
-    --grad-success:linear-gradient(135deg,#d1fae5,#a7f3d0);
-    --grad-dark:linear-gradient(135deg,#f3f4f6,#e5e7eb);
+    --muted:#94a3b8;         /* light slate */
+    --border:#2d3748;        /* dark border */
+    --shadow:rgba(0,0,0,.4);
+    /* dark gradients */
+    --grad-ai:linear-gradient(135deg,#000000,#130F40,#1a0f3f);
+    --grad-danger:linear-gradient(135deg,#7f1d1d,#991b1b);
+    --grad-success:linear-gradient(135deg,#065f46,#047857);
+    --grad-dark:linear-gradient(135deg,#000000,#1a1a2e);
     --ff-head:'Playfair Display',serif;
     --ff-mono:'IBM Plex Mono',monospace;
     --ff-body:'IBM Plex Sans',sans-serif;
   }
-  body { background:#ffffff; color:var(--ink); font-family:var(--ff-body); min-height:100vh; }
-  .card { background:var(--paper); border:1px solid var(--border); border-radius:12px; box-shadow:0 4px 16px var(--shadow); transition:all .3s cubic-bezier(.4,0,.2,1); }
+  body { background:linear-gradient(135deg,#000000,#130F40); color:var(--ink); font-family:var(--ff-body); min-height:100vh; }
+  .card { background:var(--paper2); border:1px solid var(--border); border-radius:12px; box-shadow:0 4px 16px var(--shadow); transition:all .3s cubic-bezier(.4,0,.2,1); }
   .card:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--shadow); }
   ::-webkit-scrollbar { width:6px; height:6px; }
   ::-webkit-scrollbar-track { background:var(--paper2); }

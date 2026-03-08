@@ -25,6 +25,36 @@ interface District {
 
 interface Message { role: "user" | "ai"; text: string; time: Date; }
 
+// ─── Styles ───────────────────────────────────────────────────────────────────
+const STYLES = `
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink:#1a1208; --paper:#f5efe4; --paper2:#ede5d4; --paper3:#e3d9c6;
+    --amber:#c8690a; --amber-lt:#e8820d; --red:#c0392b; --red-lt:#e74c3c;
+    --green:#1a6b3a; --green-lt:#27ae60; --yellow:#c49a00;
+    --muted:#7a6a54; --border:#c8b898; --border-dk:#a8956a;
+    --shadow:rgba(26,18,8,.12);
+    --ff-head:'JetBrains Mono',serif;
+    --ff-mono:'IBM Plex Mono',monospace;
+    --ff-body:'IBM Plex Sans',sans-serif;
+  }
+  body { background:var(--paper); color:var(--ink); font-family:var(--ff-body); }
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:var(--paper2); }
+  ::-webkit-scrollbar-thumb { background:var(--border-dk); border-radius:3px; }
+  @keyframes fadeUp   { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+  @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.35} }
+  @keyframes ticker   { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+  @keyframes dotBlink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+  @keyframes spin     { to{transform:rotate(360deg)} }
+  .fu  { animation:fadeUp .4s ease both; }
+  .fu2 { animation:fadeUp .4s .08s ease both; }
+  .fu3 { animation:fadeUp .4s .16s ease both; }
+  .fu4 { animation:fadeUp .4s .24s ease both; }
+  .fi  { animation:fadeIn .4s ease both; }
+`;
+
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const stressNorm = (s: string) => {
@@ -585,15 +615,48 @@ function RiskCardTab({ districts, loading }: { districts:District[]; loading:boo
 
 // ─── AI Briefing ──────────────────────────────────────────────────────────────
 function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
-  const [msgs, setMsgs] = useState<Message[]>([{
+  const WELCOME_MESSAGE: Message = {
     role:"ai",
     text:"Good day, Officer.\n\nI am SurgeShield AI, your dengue outbreak command assistant. I have access to real-time hospital capacity data, ML-generated forecasts, and can trigger full pipeline analyses via the SageMaker pipeline.\n\nHow may I assist you today?",
     time:new Date(),
-  }]);
+  };
+
+  const [msgs, setMsgs] = useState<Message[]>([]);
   const [input, setInput]     = useState("");
   const [busy, setBusy]       = useState(false);
   const [sessionId, setSessionId] = useState<string|null>(null);
   const endRef = useRef<HTMLDivElement>(null);
+
+  // Initialize from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("surgeshield_chat_history");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setMsgs(parsed.map((m: any) => ({ ...m, time: new Date(m.time) })));
+        const storedSessionId = localStorage.getItem("surgeshield_session_id");
+        if (storedSessionId) setSessionId(storedSessionId);
+      } catch {
+        setMsgs([WELCOME_MESSAGE]);
+      }
+    } else {
+      setMsgs([WELCOME_MESSAGE]);
+    }
+  }, []);
+
+  // Persist to localStorage whenever msgs changes
+  useEffect(() => {
+    if (msgs.length > 0) {
+      localStorage.setItem("surgeshield_chat_history", JSON.stringify(msgs));
+    }
+  }, [msgs]);
+
+  // Persist sessionId to localStorage
+  useEffect(() => {
+    if (sessionId) {
+      localStorage.setItem("surgeshield_session_id", sessionId);
+    }
+  }, [sessionId]);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior:"smooth" }); }, [msgs]);
 
@@ -634,7 +697,26 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
       {/* Sidebar */}
     <div style={{ width:240, borderRight:"1px solid var(--border)", background:"linear-gradient(180deg,var(--paper),var(--paper2))", flexShrink:0, overflowY:"auto" }}>
         <div style={{ padding:"16px 16px 10px", borderBottom:"1px solid var(--border)" }}>
-          <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", letterSpacing:"1.5px", marginBottom:10 }}>QUICK BRIEFINGS</div>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+            <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", letterSpacing:"1.5px" }}>QUICK BRIEFINGS</div>
+            <button 
+              onClick={() => {
+                setMsgs([{
+                  role:"ai",
+                  text:"Good day, Officer.\n\nI am SurgeShield AI, your dengue outbreak command assistant. I have access to real-time hospital capacity data, ML-generated forecasts, and can trigger full pipeline analyses via the SageMaker pipeline.\n\nHow may I assist you today?",
+                  time:new Date(),
+                }]);
+                localStorage.removeItem("surgeshield_chat_history");
+                localStorage.removeItem("surgeshield_session_id");
+                setSessionId(null);
+              }}
+              style={{ fontSize:8, fontFamily:"var(--ff-mono)", background:"none", border:"1px solid var(--border)", borderRadius:4, padding:"4px 8px", cursor:"pointer", color:"var(--muted)", transition:"all .2s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor="var(--red)"; (e.currentTarget as HTMLButtonElement).style.color="var(--red)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor="var(--border)"; (e.currentTarget as HTMLButtonElement).style.color="var(--muted)"; }}
+            >
+              CLEAR
+            </button>
+          </div>
           {STARTERS.map((s,i) => (
             <button key={i} onClick={() => send(s)} style={{ display:"block", width:"100%", textAlign:"left", background:"none", border:"1px solid var(--border)", borderRadius:6, padding:"9px 12px", marginBottom:6, fontSize:11, fontFamily:"var(--ff-body)", color:"var(--ink)", cursor:"pointer", transition:"all .2s", lineHeight:1.4 }}
               onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background="var(--grad-ai)"; (e.currentTarget as HTMLButtonElement).style.color="#ffffff"; (e.currentTarget as HTMLButtonElement).style.borderColor="var(--accent)"; }}
@@ -734,7 +816,7 @@ export default function App() {
 
   return (
     <>
-      {/* <style>{STYLES}</style> */}
+      <style>{STYLES}</style>
       <Ticker districts={districts}/>
       <TopBar tab={tab} setTab={setTab} lastRun={pipelineStatus?.generated_at ?? null}/>
       {tab==="Situation Map" && <SituationMap districts={districts} loading={loading}/>}
