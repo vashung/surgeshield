@@ -119,7 +119,7 @@ async function buildDataContext(): Promise<string> {
   }
 
   // ── Hospital capacity ──
-  const districts: any[] = capacity?.districts ?? [];
+  const districts: any[] = capacity?.districts ?? capacity?.data ?? capacity?.hospitals ?? Object.values(capacity || {}).flat() ?? [];
   if (districts.length > 0) {
     lines.push("\n[HOSPITAL CAPACITY — LIVE DATA]");
     lines.push("district | stress_level | avg_cases | max_cases | total_beds | icu_beds | platelet_stock | available_staff | cases_per_bed");
@@ -128,6 +128,10 @@ async function buildDataContext(): Promise<string> {
         `${d.district} | ${d.stress_level} | ${d.avg_cases} | ${d.max_cases} | ${d.total_beds} | ${d.icu_beds} | ${d.platelet_stock} | ${d.available_staff} | ${d.cases_per_bed}`
       );
     }
+  } else if (capacity) {
+    // If no structured districts array, include raw capacity data
+    lines.push("\n[HOSPITAL CAPACITY — RAW DATA]");
+    lines.push(JSON.stringify(capacity, null, 2));
   } else {
     lines.push("\n[HOSPITAL CAPACITY] No live data available — pipeline may not have run yet.");
   }
@@ -187,14 +191,14 @@ You are SurgeShield AI, a dengue outbreak command assistant optimized for cost e
 
 DATA STATUS: ${freshness.isStale ? "STALE (>2 hours old)" : "FRESH"} | Last run: ${freshness.lastRun}
 
-CRITICAL RULES:
-1. ALWAYS provide a comprehensive answer using the data below - NEVER say data is insufficient
-2. Analyze and provide specific numbers, trends, and insights from the available data
-3. If data is STALE and question asks about predictions: ALSO add "Fresh analysis has been triggered" + end with STALE_TRIGGER_PIPELINE
+** CRITICAL RULES - FOLLOW EXACTLY **
+1. NEVER respond "data is not available" or "data appears to be missing" - ALL data is provided below
+2. ALWAYS analyze and respond using the provided data - even if partial or seeming incomplete
+3. If data is STALE and question asks about predictions: add "Fresh analysis has been triggered" + end with STALE_TRIGGER_PIPELINE
 4. If data is STALE but question is routine (capacity/alerts): just answer, no mention of staleness
-5. DO NOT mention wait times, minutes, or future availability - only respond with what you know NOW
+5. For location-based queries (e.g., "Pune"): search through all provided data and always find a response
 
-Key: Stale data is still useful data. ALWAYS answer using it, then optionally trigger fresh analysis.
+** KEY INSTRUCTION: You have all available data below. Answer it. Do not say it's missing. **
 
 === LIVE SURGESHIELD DATA ===
 ${dataContext}
