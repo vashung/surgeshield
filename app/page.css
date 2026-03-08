@@ -10,11 +10,11 @@
     --border:#2d3748;        /* dark border */
     --shadow:rgba(0,0,0,.4);
     /* dark gradients */
-    --grad-ai:linear-gradient(135deg,#000000,#130F40,#1a0f3f);
+    --grad-ai:linear-gradient(135deg,#231825,#130F40,#1a0f3f);
     --grad-danger:linear-gradient(135deg,#7f1d1d,#991b1b);
     --grad-success:linear-gradient(135deg,#065f46,#047857);
     --grad-dark:linear-gradient(135deg,#000000,#1a1a2e);
-    --ff-head:'Playfair Display',serif;
+    --ff-head:'JetBrains Mono',serif;
     --ff-mono:'IBM Plex Mono',monospace;
     --ff-body:'IBM Plex Sans',sans-serif;
   }

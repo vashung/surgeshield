@@ -349,7 +349,7 @@ function CapacityTab({ districts, loading }: { districts:District[]; loading:boo
     <div style={{ padding:28, background:"linear-gradient(135deg,#000000,#130F40)" }}>
       <div className="fu" style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:20 }}>
         <div>
-          <div style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, lineHeight:1 }}>Hospital Capacity</div>
+          <div style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, lineHeight:1, color:"var(--paper)" }}>Hospital Capacity</div>
           <div style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--muted)", marginTop:6, letterSpacing:".8px" }}>BED UTILISATION & RESOURCE STATUS — LIVE FROM S3</div>
         </div>
         <div style={{ display:"flex", gap:6 }}>
@@ -448,8 +448,8 @@ function PredictionsTab({ districts, loading }: { districts:District[]; loading:
 
   return (
     <div style={{ padding:28, background:"linear-gradient(135deg,#000000,#130F40)" }}>
-      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--ink)" }}>Dengue Forecast</div>
-      <div className="fu2" style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--muted)", letterSpacing:".8px", marginBottom:22 }}>ML-POWERED PREDICTIONS · LIVE FROM SAGEMAKER PIPELINE</div>
+      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--paper)" }}>Dengue Forecast</div>
+      <div className="fu2" style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--paper)", letterSpacing:".8px", marginBottom:22 }}>ML-POWERED PREDICTIONS · LIVE FROM SAGEMAKER PIPELINE</div>
       {/* bar chart added for modern visualization */}
       <BarChart districts={districts} />
       <div className="fu3" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14, marginBottom:22 }}>
@@ -520,8 +520,8 @@ function HeatmapTab({ districts, loading }: { districts:District[]; loading:bool
   const maxCases = Math.max(...districts.map(d => d.avg_cases), 1);
   return (
     <div style={{ padding:28, background:"linear-gradient(135deg,#000000,#130F40)" }}>
-      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--ink)" }}>Case Heatmap</div>
-      <div className="fu2" style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--muted)", letterSpacing:".8px", marginBottom:22 }}>
+      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--paper)" }}>Case Heatmap</div>
+      <div className="fu2" style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--paper)", letterSpacing:".8px", marginBottom:22 }}>
         COLOUR INTENSITY IS PROPORTIONAL TO AVERAGE CASES PER DISTRICT
       </div>
       <div className="card" style={{ position:"relative", width:"100%", height:480, overflow:"hidden" }}>
@@ -554,8 +554,8 @@ function HeatmapTab({ districts, loading }: { districts:District[]; loading:bool
 function InventoryTab({ districts, loading }: { districts:District[]; loading:boolean }) {
   return (
     <div style={{ padding:28, background:"linear-gradient(135deg,#000000,#130F40)" }}>
-      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--ink)" }}>Data Inventory Map</div>
-      <div className="fu2" style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--muted)", letterSpacing:".8px", marginBottom:22 }}>
+      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--paper)" }}>Data Inventory Map</div>
+      <div className="fu2" style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--paper)", letterSpacing:".8px", marginBottom:22 }}>
         SIZE OF CIRCLES INDICATES TOTAL BEDS; INNER RED DOT PROPORTIONATE TO ICU BEDS
       </div>
       <div className="card" style={{ position:"relative", width:"100%", height:480, overflow:"hidden" }}>
@@ -586,7 +586,7 @@ function InventoryTab({ districts, loading }: { districts:District[]; loading:bo
 function RiskCardTab({ districts, loading }: { districts:District[]; loading:boolean }) {
   return (
     <div style={{ padding:28, background:"linear-gradient(135deg,#000000,#130F40)" }}>
-      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--ink)" }}>Risk Score Cards</div>
+      <div className="fu" style={{ fontFamily:"var(--ff-head)", fontSize:26, fontWeight:900, marginBottom:6, color:"var(--paper)" }}>Risk Score Cards</div>
       <div className="fu2" style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--muted)", letterSpacing:".8px", marginBottom:22 }}>
         SORTED BY RISK SCORE WITH KEY METRICS
       </div>
@@ -598,11 +598,11 @@ function RiskCardTab({ districts, loading }: { districts:District[]; loading:boo
             const stress = stressNorm(d.stress_level);
             const risk = riskScore(d);
             return (
-              <div key={d.district} className="card" style={{ padding:16, position:"relative", borderLeft:`4px solid ${sc(stress)}`, background:`linear-gradient(135deg,var(--paper),${sc(stress)}08)` }}>
-                <div style={{ fontSize:16, fontWeight:700 }}>{d.district}</div>
-                <div style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:sc(stress), marginTop:4 }}>{si(stress)} {stress}</div>
+              <div key={d.district} className="card" style={{ padding:16, position:"relative", color:"var(--paper)", borderLeft:`4px solid ${sc(stress)}`, background:`linear-gradient(135deg,var(--paper),${sc(stress)}08)` }}>
+                <div style={{ fontSize:16, fontWeight:700, color:"var(--paper)" }}>{d.district}</div>
+                <div style={{ fontSize:11, fontFamily:"var(--ff-mono)", color:"var(--paper)", marginTop:4 }}>{si(stress)} {stress}</div>
                 <div style={{ marginTop:8, fontSize:14, fontWeight:900 }}>Risk {risk}/100</div>
-                <div style={{ fontSize:10, fontFamily:"var(--ff-mono)", color:"var(--muted)", marginTop:4 }}>Avg {Math.round(d.avg_cases)} · Util {d.cases_per_bed}%</div>
+                <div style={{ fontSize:10, fontFamily:"var(--ff-mono)", color:"var(--paper)", marginTop:4 }}>Avg {Math.round(d.avg_cases)} · Util {d.cases_per_bed}%</div>
                 <div style={{ position:"absolute", top:8, right:8, width:12, height:12, borderRadius:"50%", background:sc(stress) }} />
               </div>
             );
@@ -764,6 +764,8 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
                 localStorage.removeItem("surgeshield_chat_history");
                 localStorage.removeItem("surgeshield_session_id");
                 setSessionId(null);
+                // Auto-invoke agent with trigger message
+                setTimeout(() => send("Run full analysis for all districts"), 300);
               }}
               style={{ fontSize:8, fontFamily:"var(--ff-mono)", background:"none", border:"1px solid var(--border)", borderRadius:4, padding:"4px 8px", cursor:"pointer", color:"var(--muted)", transition:"all .2s" }}
               onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor="var(--red)"; (e.currentTarget as HTMLButtonElement).style.color="var(--red)"; }}
