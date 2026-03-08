@@ -23,7 +23,7 @@ interface District {
   hum?: number;
 }
 
-interface Message { role: "user" | "ai"; text: string; time: Date; }
+interface Message { role: "user" | "ai"; text: string; time: Date; fromCache?: boolean; }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const STYLES = `
@@ -710,7 +710,9 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
       // Check cache first
       const cached = getCachedResponse(q);
       if (cached) {
-        setMsgs(m => [...m, { role:"ai", text:`${cached}\n\n*(Response from cache | Agent not invoked)`, time:new Date() }]);
+        // Add loading animation delay for cached responses
+        await new Promise(resolve => setTimeout(resolve, 250));
+        setMsgs(m => [...m, { role:"ai", text:cached, time:new Date(), fromCache:true }]);
         setBusy(false);
         return;
       }
@@ -805,7 +807,10 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
           <div style={{ maxWidth:580, padding:"14px 18px", borderRadius:m.role==="user"?"12px 12px 3px 12px":"3px 12px 12px 12px", background:m.role==="user"?"var(--grad-ai)":"var(--paper)", border:`1px solid ${m.role==="user"?"var(--accent)":"var(--border)"}`, fontSize:12, fontFamily:"var(--ff-body)", lineHeight:1.8, color:m.role==="user"?"#ffffff":"var(--ink)", boxShadow:"0 4px 12px var(--shadow)" }}>
                 {renderText(m.text)}
               </div>
-              <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", marginTop:4 }}>{tStr(m.time)}</div>
+              <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", marginTop:4, display:"flex", alignItems:"center", gap:8 }}>
+                <span>{tStr(m.time)}</span>
+                {m.fromCache && <span style={{ fontSize:8, fontStyle:"italic", color:"var(--amber)", opacity:0.7 }}>Response from Agents Knowledge Base | Agent not invoked</span>}
+              </div>
             </div>
           ))}
           {busy && (
@@ -819,6 +824,12 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
           <div ref={endRef}/>
         </div>
         <div style={{ borderTop:"1px solid var(--border)", padding:"14px 32px 20px", background:"var(--paper)" }}>
+          {/* Data Disclaimer */}
+          <div style={{ background:"var(--paper2)", border:"1px solid var(--border)", borderRadius:6, padding:"10px 12px", fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", lineHeight:1.6, letterSpacing:".5px", marginBottom:12 }}>
+            <div style={{ color:"var(--ink)", fontWeight:600, marginBottom:4 }}>📊 Data & Forecasts</div>
+            <div style={{fontSize:8, fontWeight:300, fontStyle:"italic"}}>Please note that these predictions are based on the latest available data. For the most accurate and up-to-date forecasts, consider triggering a new analysis by explicitly requesting <span style={{ fontWeight:600, color:"var(--amber)" }}>"Run pipeline"</span> or <span style={{ fontWeight:600, color:"var(--amber)" }}>"Trigger analysis".</span></div>
+          </div>
+
           <div style={{ display:"flex", gap:10, border:"1px solid var(--border-dk)", borderRadius:8, padding:"4px 4px 4px 18px", background:"var(--paper2)", transition:"border-color .2s" }}
             onFocus={e => (e.currentTarget as HTMLDivElement).style.borderColor="var(--accent)"}
             onBlur={e  => (e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
