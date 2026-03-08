@@ -426,7 +426,7 @@ function BarChart({ districts }: { districts: District[] }) {
           return (
             <g key={d.district} transform={`translate(0,${i*24})`}>
               <rect x={0} y={4} width={w} height={16} fill="var(--paper)" />
-              <text x={w+6} y={16} fontSize="10" fontFamily="var(--ff-mono)" fill="var(--ink)">{Math.round(d.avg_cases)}</text>
+              <text x={w+6} y={16} fontSize="10" fontFamily="var(--ff-mono)" fill="var(--paper)">{Math.round(d.avg_cases)}</text>
               <text x={0} y={-10} fontSize="9" color="var(--paper)" fontFamily="var(--ff-mono)" fill="var(--papaer)">{d.district}</text>
             </g>
           );
