@@ -419,15 +419,15 @@ function BarChart({ districts }: { districts: District[] }) {
   const max = sorted[0]?.avg_cases || 1;
   return (
     <div style={{ marginBottom:22 }}>
-      <div style={{ fontFamily:"var(--ff-head)", fontSize:16, fontWeight:700, marginBottom:12 }}>Average Cases by District</div>
+      <div style={{ fontFamily:"var(--ff-head)", fontSize:16, fontWeight:700, marginBottom:12, color:"var(--paper)" }}>Average Cases by District</div>
       <svg viewBox={`0 0 600 ${sorted.length * 24}`} style={{ width:"100%", height:"auto" }}>
         {sorted.map((d,i) => {
           const w = (d.avg_cases / max) * 550;
           return (
             <g key={d.district} transform={`translate(0,${i*24})`}>
-              <rect x={0} y={4} width={w} height={16} fill="var(--accent)" />
+              <rect x={0} y={4} width={w} height={16} fill="var(--paper)" />
               <text x={w+6} y={16} fontSize="10" fontFamily="var(--ff-mono)" fill="var(--ink)">{Math.round(d.avg_cases)}</text>
-              <text x={0} y={-2} fontSize="9" fontFamily="var(--ff-mono)" fill="var(--muted)">{d.district}</text>
+              <text x={0} y={-10} fontSize="9" color="var(--paper)" fontFamily="var(--ff-mono)" fill="var(--papaer)">{d.district}</text>
             </g>
           );
         })}
