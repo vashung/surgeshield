@@ -11,7 +11,7 @@ export async function GET() {
       Key:    `${config.resultsPrefix}pipeline_status.json`,
     }));
     const data = JSON.parse(await res.Body!.transformToString());
-    return NextResponse.json({ connected: true, model: "Claude 3.5 Sonnet", ...data });
+    return NextResponse.json({ connected: true, model: config.agentModel, ...data });
   } catch (err: any) {
     // Check if it's just a missing file (NoSuchKey) or an actual connection error
     if (err.name === 'NoSuchKey') {
@@ -20,7 +20,7 @@ export async function GET() {
         connected: true,
         success: false,
         generated_at: null,
-        model: "Claude 3.5 Sonnet",
+        model: config.agentModel,
         message: "Pipeline not yet run"
       });
     }
@@ -31,7 +31,7 @@ export async function GET() {
       connected: false, 
       success: false, 
       generated_at: null, 
-      model: "Claude 3.5 Sonnet",
+      model: config.agentModel,
       error: err.message 
     });
   }

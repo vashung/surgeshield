@@ -16,6 +16,7 @@ export const sagemaker     = new SageMakerClient({ region, credentials });
 export const config = {
   agentId:          process.env.BEDROCK_AGENT_ID!,
   agentAliasId:     process.env.BEDROCK_AGENT_ALIAS_ID!,
+  agentModel:       process.env.BEDROCK_AGENT_MODEL ?? "Amazon Nova 1",
   bucket:           process.env.S3_BUCKET!,
   resultsPrefix:    process.env.S3_RESULTS_PREFIX ?? "results/latest/",
   sagemakerRoleArn: process.env.SAGEMAKER_ROLE_ARN!,

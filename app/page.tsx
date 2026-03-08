@@ -660,6 +660,45 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior:"smooth" }); }, [msgs]);
 
+  // Simple hash function for caching questions
+  const hashQuestion = (q: string): string => {
+    let h = 0;
+    for (let i = 0; i < q.length; i++) {
+      const c = q.charCodeAt(i);
+      h = ((h << 5) - h) + c;
+      h = h & h;
+    }
+    return Math.abs(h).toString(36);
+  };
+
+  // Get cached response for a question
+  const getCachedResponse = (q: string): string | null => {
+    try {
+      const cache = JSON.parse(localStorage.getItem("surgeshield_response_cache") || "{}");
+      const hash = hashQuestion(q);
+      return cache[hash] || null;
+    } catch {
+      return null;
+    }
+  };
+
+  // Cache a response for a question
+  const cacheResponse = (q: string, response: string): void => {
+    try {
+      const cache = JSON.parse(localStorage.getItem("surgeshield_response_cache") || "{}");
+      const hash = hashQuestion(q);
+      cache[hash] = response;
+      // Keep cache size manageable (max 50 responses)
+      const keys = Object.keys(cache);
+      if (keys.length > 50) {
+        delete cache[keys[0]];
+      }
+      localStorage.setItem("surgeshield_response_cache", JSON.stringify(cache));
+    } catch {
+      // Silently fail if cache is full
+    }
+  };
+
   const send = useCallback(async (text?: string) => {
     const q = (text || input).trim();
     if (!q || busy) return;
@@ -668,10 +707,24 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
     setMsgs(m => [...m, { role:"user", text:q, time:new Date() }]);
 
     try {
+      // Check cache first
+      const cached = getCachedResponse(q);
+      if (cached) {
+        setMsgs(m => [...m, { role:"ai", text:`${cached}\n\n*(Response from cache | Agent not invoked)`, time:new Date() }]);
+        setBusy(false);
+        return;
+      }
+
+      // Call agent only if not cached
       const res  = await fetch("/api/agent", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ message:q, sessionId }) });
       const data = await res.json();
+      const response = data.response || data.error || "No response.";
+      
+      // Cache the response
+      cacheResponse(q, response);
+      
       if (data.sessionId) setSessionId(data.sessionId);
-      setMsgs(m => [...m, { role:"ai", text:data.response || data.error || "No response.", time:new Date() }]);
+      setMsgs(m => [...m, { role:"ai", text:response, time:new Date() }]);
     } catch {
       setMsgs(m => [...m, { role:"ai", text:"Connection error. Please check your Bedrock Agent configuration.", time:new Date() }]);
     } finally {
@@ -771,13 +824,13 @@ function AIBriefing({ pipelineStatus }: { pipelineStatus: any }) {
             onBlur={e  => (e.currentTarget as HTMLDivElement).style.borderColor="var(--border)"}
           >
             <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==="Enter" && send()}
-              placeholder="Request a district briefing, capacity report, or trigger pipeline..."
+              placeholder="Request analysis, ask about district capacity, forecasts, etc..."
               style={{ flex:1, background:"none", border:"none", outline:"none", color:"var(--ink)", fontSize:13, fontFamily:"var(--ff-body)", padding:"10px 0" }}
             />
             <button onClick={() => send()} disabled={busy||!input.trim()} style={{ background:input.trim()&&!busy?"var(--ink)":"var(--paper3)", border:"none", borderRadius:6, padding:"10px 22px", color:input.trim()&&!busy?"var(--paper)":"var(--muted)", fontSize:11, fontFamily:"var(--ff-mono)", fontWeight:600, letterSpacing:"1px", cursor:input.trim()&&!busy?"pointer":"default", transition:"all .2s" }}>SEND</button>
           </div>
           <div style={{ fontSize:9, fontFamily:"var(--ff-mono)", color:"var(--muted)", marginTop:7, letterSpacing:".5px" }}>
-            Connected to AWS Bedrock Agent · {process.env.NEXT_PUBLIC_AWS_REGION || "us-east-1"} · Agent ID: {process.env.NEXT_PUBLIC_AGENT_ID || "534E9HOLQC"}
+            💡 Tip: Ask about predictions to automatically trigger fresh analysis if data is stale
           </div>
         </div>
       </div>
