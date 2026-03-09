@@ -1,4 +1,4 @@
-# SurgeShield — Public Health Command Dashboard
+# SurgeShield — Public Health Disease Outbreak Management
 
 AI-powered dengue outbreak management for district health officers.
 Built with Next.js 14, AWS Bedrock Agent, SageMaker, and S3.
