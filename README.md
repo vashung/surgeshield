@@ -40,12 +40,12 @@ Fill in your values:
 AWS_REGION=us-east-1
 AWS_ACCESS_KEY_ID=AKIA...
 AWS_SECRET_ACCESS_KEY=...
-BEDROCK_AGENT_ID=534E9HOLQC
-BEDROCK_AGENT_ALIAS_ID=TSTALIASID
-S3_BUCKET=surgeshieldai-dengue-data
-S3_RESULTS_PREFIX=results/latest/
-SAGEMAKER_ROLE_ARN=arn:aws:iam::337834613550:role/your-role
-SAGEMAKER_IMAGE_URI=337834613550.dkr.ecr.us-east-1.amazonaws.com/sagemaker-surgeshield-learn:latest
+BEDROCK_AGENT_ID=
+BEDROCK_AGENT_ALIAS_ID=
+S3_BUCKET=
+S3_RESULTS_PREFIX=
+SAGEMAKER_ROLE_ARN=
+SAGEMAKER_IMAGE_URI=
 ```
 
 ### 3. Run locally
